@@ -1,6 +1,6 @@
 {
   "log": {
-    "level": "info",
+    "level": "panic",
     "timestamp": true
   },
   "dns": {
@@ -8,52 +8,211 @@
       {
         "tag": "dns_proxy",
         "address": "https://1.1.1.1/dns-query",
+        "address_resolver": "dns_direct",
         "strategy": "prefer_ipv4"
+      },
+      {
+        "tag": "dns_proxy_ipv4",
+        "address": "https://1.1.1.1/dns-query",
+        "address_resolver": "dns_direct",
+        "strategy": "ipv4_only"
       },
       {
         "tag": "dns_direct",
         "address": "local",
         "strategy": "prefer_ipv4"
+      },
+      {
+        "tag": "dns_block",
+        "address": "rcode://success"
       }
     ],
     "rules": [
       {
         "outbound": "any",
         "server": "dns_direct"
+      },
+      {
+        "rule_set": [
+          "geosite-category-ads-all",
+          "geosite-malware",
+          "geosite-phishing",
+          "geosite-cryptominers"
+        ],
+        "server": "dns_block",
+        "disable_cache": true
+      },
+      {
+        "rule_set": "geosite-ir",
+        "server": "dns_direct"
+      },
+      {
+        "rule_set": "geosite-meta",
+        "server": "dns_proxy_ipv4"
       }
     ],
     "final": "dns_proxy"
   },
+  "ntp": {
+    "enabled": true,
+    "server": "ir.pool.ntp.org",
+    "server_port": 123
+  },
   "inbounds": [
     {
-      "type": "mixed",
-      "tag": "mixed-in",
-      "listen": "127.0.0.1",
-      "listen_port": 2080,
-      "sniff": true
+      "type": "tun",
+      "mtu": 9000,
+      "address": [
+        "172.19.0.1/30",
+        "fdfe:dcba:9876::1/126"
+      ],
+      "auto_route": true,
+      "strict_route": true,
+      "stack": "mixed",
+      "platform": {
+        "http_proxy": {
+          "enabled": false,
+          "server": "",
+          "server_port": 20122
+        }
+      },
+      "sniff": true,
+      "sniff_override_destination": true,
+      "domain_strategy": "ipv4_only"
     },
     {
       "type": "socks",
       "tag": "socks-in",
       "listen": "127.0.0.1",
-      "listen_port": 2081,
+      "listen_port": 2333,
+      "domain_strategy": "prefer_ipv4"
+    },
+    {
+      "type": "mixed",
+      "tag": "mixed-in",
+      "listen": "0.0.0.0",
+      "listen_port": 2080,
       "sniff": true
+    },
+    {
+      "type": "direct",
+      "tag": "dns-in",
+      "listen": "0.0.0.0",
+      "listen_port": 6450,
+      "override_address": "8.8.8.8",
+      "override_port": 53
     }
   ],
   "outbounds": [
     {
       "type": "selector",
-      "tag": "proxy",
+      "tag": "free_config",
       "outbounds": [
-        "server_md",
-        "server_nl",
-        "server_de"
-      ],
-      "default": "server_md"
+        "T.me/SiNAVM",
+        "🇲🇩config",
+        "🇳🇱config",
+        "🇳🇴config",
+        "🇵🇹config",
+        "🇩🇰config",
+        "🇧🇪config",
+        "🇨🇦config",
+        "🇺🇦config",
+        "🇵🇱config",
+        "🇦🇹config",
+        "🇭🇰config",
+        "🇱🇹config",
+        "🇮🇹config",
+        "🇫🇷config",
+        "🇷🇺config",
+        "🇩🇪config",
+        "🇺🇸config",
+        "🇮🇱config",
+        "🇬🇧config",
+        "🇪🇪config",
+        "🇬🇷config",
+        "🇮🇪config",
+        "🇨🇭config",
+        "🇭🇺config",
+        "🇷🇴config",
+        "🇹🇷config",
+        "🇪🇸config",
+        "🇷🇸config",
+        "🇫🇮config",
+        "🇸🇪config",
+        "🇧🇬config",
+        "🇨🇿config",
+        "🇸🇰config",
+        "🇱🇻config",
+        "🇮🇸config",
+        "🇯🇵config",
+        "🇧🇷config",
+        "🇸🇮config",
+        "🇦🇲config",
+        "🇲🇰config",
+        "🇱🇺config",
+        "🇰🇷config",
+        "🇭🇷config"
+      ]
     },
     {
+      "type": "urltest",
+      "tag": "T.me/SiNAVM",
+      "outbounds": [
+        "🇲🇩config",
+        "🇳🇱config",
+        "🇳🇴config",
+        "🇵🇹config",
+        "🇩🇰config",
+        "🇧🇪config",
+        "🇨🇦config",
+        "🇺🇦config",
+        "🇵🇱config",
+        "🇦🇹config",
+        "🇭🇰config",
+        "🇱🇹config",
+        "🇮🇹config",
+        "🇫🇷config",
+        "🇷🇺config",
+        "🇩🇪config",
+        "🇺🇸config",
+        "🇮🇱config",
+        "🇬🇧config",
+        "🇪🇪config",
+        "🇬🇷config",
+        "🇮🇪config",
+        "🇨🇭config",
+        "🇭🇺config",
+        "🇷🇴config",
+        "🇹🇷config",
+        "🇪🇸config",
+        "🇷🇸config",
+        "🇫🇮config",
+        "🇸🇪config",
+        "🇧🇬config",
+        "🇨🇿config",
+        "🇸🇰config",
+        "🇱🇻config",
+        "🇮🇸config",
+        "🇯🇵config",
+        "🇧🇷config",
+        "🇸🇮config",
+        "🇦🇲config",
+        "🇲🇰config",
+        "🇱🇺config",
+        "🇰🇷config",
+        "🇭🇷config"
+      ],
+      "url": "http://www.gstatic.com/generate_204",
+      "interval": "3m0s"
+    },
+
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+        {
       "type": "trojan",
-      "tag": "server_md",
+      "tag": "🇲🇩config",
       "server": "morse-stank-most.stark-industries.solutions",
       "server_port": 443,
       "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
@@ -64,7 +223,7 @@
     },
     {
       "type": "trojan",
-      "tag": "server_nl",
+      "tag": "🇳🇱config",
       "server": "acre-cable-skip.stark-industries.solutions",
       "server_port": 443,
       "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
@@ -75,7 +234,150 @@
     },
     {
       "type": "trojan",
-      "tag": "server_de",
+      "tag": "🇳🇴config",
+      "server": "copy-wifi-twins.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "copy-wifi-twins.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇵🇹config",
+      "server": "eats-rigor-judge.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "eats-rigor-judge.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇩🇰config",
+      "server": "wispy-crib-net.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "wispy-crib-net.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇧🇪config",
+      "server": "chop-wrist-bud.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "chop-wrist-bud.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇨🇦config",
+      "server": "both-cramp-banjo.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "both-cramp-banjo.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇺🇦config",
+      "server": "keep-chess-self.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "keep-chess-self.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇵🇱config",
+      "server": "tag-frown-lying.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "tag-frown-lying.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇦🇹config",
+      "server": "cushy-coil-chaos.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "cushy-coil-chaos.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇭🇰config",
+      "server": "skate-whole-old.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "skate-whole-old.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇱🇹config",
+      "server": "stem-entry-gala.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "stem-entry-gala.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇮🇹config",
+      "server": "boss-tutu-fled.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "boss-tutu-fled.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇫🇷config",
+      "server": "cadet-woven-march.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "cadet-woven-march.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇷🇺config",
+      "server": "slaw-hush-agile.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "slaw-hush-agile.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇩🇪config",
       "server": "share-basil-gills.stark-industries.solutions",
       "server_port": 443,
       "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
@@ -85,22 +387,359 @@
       }
     },
     {
-      "type": "direct",
-      "tag": "direct"
+      "type": "trojan",
+      "tag": "🇺🇸config",
+      "server": "patch-lint-hazel.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "patch-lint-hazel.stark-industries.solutions"
+      }
     },
     {
-      "type": "block",
-      "tag": "block"
+      "type": "trojan",
+      "tag": "🇮🇱config",
+      "server": "bring-glove-shine.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "bring-glove-shine.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇬🇧config",
+      "server": "ankle-straw-untie.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "ankle-straw-untie.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇪🇪config",
+      "server": "tag-stump-ranch.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "tag-stump-ranch.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇬🇷config",
+      "server": "stem-omen-area.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "stem-omen-area.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇮🇪config",
+      "server": "slang-pecan-lever.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "slang-pecan-lever.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇨🇭config",
+      "server": "crazy-grope-jeep.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "crazy-grope-jeep.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇭🇺config",
+      "server": "sleep-boots-motor.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "sleep-boots-motor.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇷🇴config",
+      "server": "guy-trace-lyric.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "guy-trace-lyric.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇹🇷config",
+      "server": "dried-chow-kite.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "dried-chow-kite.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇪🇸config",
+      "server": "strut-brisk-scope.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "strut-brisk-scope.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇷🇸config",
+      "server": "gong-aqua-rhyme.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "gong-aqua-rhyme.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇫🇮config",
+      "server": "thaw-gut-jelly.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "thaw-gut-jelly.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇸🇪config",
+      "server": "rash-scorn-glue.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "rash-scorn-glue.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇧🇬config",
+      "server": "cache-giver-wife.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "cache-giver-wife.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇨🇿config",
+      "server": "bats-paper-chump.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "bats-paper-chump.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇸🇰config",
+      "server": "nacho-rerun-crepe.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "nacho-rerun-crepe.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇱🇻config",
+      "server": "dig-cage-gala.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "dig-cage-gala.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇮🇸config",
+      "server": "trap-movie-power.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "trap-movie-power.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇯🇵config",
+      "server": "lemon-gas-army.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "lemon-gas-army.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇧🇷config",
+      "server": "wake-bagel-tall.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "wake-bagel-tall.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇸🇮config",
+      "server": "lazy-work-poppy.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "lazy-work-poppy.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇦🇲config",
+      "server": "upon-wimp-legal.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "upon-wimp-legal.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇲🇰config",
+      "server": "snarl-dish-cloth.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "snarl-dish-cloth.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇱🇺config",
+      "server": "parka-limit-runny.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "parka-limit-runny.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇰🇷config",
+      "server": "vice-dove-flock.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "vice-dove-flock.stark-industries.solutions"
+      }
+    },
+    {
+      "type": "trojan",
+      "tag": "🇭🇷config",
+      "server": "dose-siren-pagan.stark-industries.solutions",
+      "server_port": 443,
+      "password": "e6a2e741-0fce-440b-910c-b81325e2263a",
+      "tls": {
+        "enabled": true,
+        "server_name": "dose-siren-pagan.stark-industries.solutions"
+      }
     }
   ],
   "route": {
     "rules": [
       {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 53
+          }
+        ],
+        "action": "sniff"
+      },
+      {
+        "protocol": "dns",
+        "action": "hijack-dns"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 853
+          },
+          {
+            "network": "udp",
+            "port": 443
+          }
+        ],
+        "action": "reject",
+        "method": "default"
+      },
+      {
         "ip_is_private": true,
         "outbound": "direct"
       },
+
       {
-        "rule_set": "geosite-ir",
+        "protocol": "quic",
+        "outbound": "block"
+      },
+      {
+        "rule_set": [
+          "geosite-malware",
+          "geosite-phishing",
+          "geosite-cryptominers",
+          "geoip-malware",
+          "geoip-phishing"
+        ],
+        "action": "reject",
+        "method": "default"
+      },
+      {
+        "rule_set": [
+          "geosite-ir",
+          "geoip-ir"
+        ],
         "outbound": "direct"
       }
     ],
@@ -110,9 +749,74 @@
         "tag": "geosite-ir",
         "format": "binary",
         "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-ir.srs",
-        "download_detour": "direct"
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-category-ads-all",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-category-ads-all.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-malware",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-malware.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-phishing",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-phishing.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-cryptominers",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-cryptominers.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-ir",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-ir.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-malware",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-malware.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geoip-phishing",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geoip-phishing.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
+      },
+      {
+        "type": "remote",
+        "tag": "geosite-meta",
+        "format": "binary",
+        "url": "https://raw.githubusercontent.com/Chocolate4U/Iran-sing-box-rules/rule-set/geosite-meta.srs",
+        "download_detour": "direct",
+        "update_interval": "72h0m0s"
       }
     ],
-    "final": "proxy"
+    "final": "free_config"
   }
 }

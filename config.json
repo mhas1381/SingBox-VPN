@@ -9,18 +9,18 @@
         "tag": "dns_proxy",
         "address": "https://1.1.1.1/dns-query",
         "address_resolver": "dns_direct",
-        "strategy": "prefer_ipv4",
+        "strategy": "prefer_ipv4"
       },
       {
         "tag": "dns_proxy_ipv4",
         "address": "https://1.1.1.1/dns-query",
         "address_resolver": "dns_direct",
-        "strategy": "ipv4_only",
+        "strategy": "ipv4_only"
       },
       {
         "tag": "dns_direct",
         "address": "local",
-        "strategy": "prefer_ipv4",
+        "strategy": "prefer_ipv4"
       },
       {
         "tag": "dns_block",
@@ -51,12 +51,12 @@
         "server": "dns_proxy_ipv4"
       }
     ],
-    "final": "dns_proxy",
+    "final": "dns_proxy"
   },
   "ntp": {
     "enabled": true,
     "server": "ir.pool.ntp.org",
-    "server_port": 123,
+    "server_port": 123
   },
   "inbounds": [
     {
@@ -682,7 +682,7 @@
         "enabled": true,
         "server_name": "dose-siren-pagan.stark-industries.solutions"
       }
-    },
+    }
   ],
   "route": {
     "rules": [

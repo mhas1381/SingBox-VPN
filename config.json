@@ -831,9 +831,6 @@
       "enabled": true,
       "path": "cache.db",
       "store_fakeip": true
-    },
-    "clash_api": {
-      "default_mode": "test"
     }
   }
 }

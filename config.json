@@ -10,20 +10,17 @@
         "address": "https://1.1.1.1/dns-query",
         "address_resolver": "dns_direct",
         "strategy": "prefer_ipv4",
-        "detour": "free_config"
       },
       {
         "tag": "dns_proxy_ipv4",
         "address": "https://1.1.1.1/dns-query",
         "address_resolver": "dns_direct",
         "strategy": "ipv4_only",
-        "detour": "free_config"
       },
       {
         "tag": "dns_direct",
         "address": "local",
         "strategy": "prefer_ipv4",
-        "detour": "free_config"
       },
       {
         "tag": "dns_block",
@@ -55,13 +52,11 @@
       }
     ],
     "final": "dns_proxy",
-    "independent_cache": true
   },
   "ntp": {
     "enabled": true,
     "server": "ir.pool.ntp.org",
     "server_port": 123,
-    "detour": "direct"
   },
   "inbounds": [
     {
@@ -822,15 +817,6 @@
         "update_interval": "72h0m0s"
       }
     ],
-    "final": "free_config",
-    "auto_detect_interface": true,
-    "override_android_vpn": true
-  },
-  "experimental": {
-    "cache_file": {
-      "enabled": true,
-      "path": "cache.db",
-      "store_fakeip": true
-    }
+    "final": "free_config"
   }
 }
